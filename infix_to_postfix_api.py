@@ -2,7 +2,7 @@ import re
 from collections import deque
 
 OPERATORS = {'+', '-', '*', '/', '(', ')', '^'}
-OPERATORS_WITHOUT_PLUS_AND_MINUS = {'*', '/', '^'}
+MULT_DIV_EXP_L_PARENTHESIS = {'*', '/', '^', '('}
 PLUS_AND_MINUS = {'+', '-'}
 
 
@@ -41,10 +41,13 @@ def get_infix_queue(expression: str):
     size = len(expression_list)
     i = 0
     while i < size:
-        if expression_list[i] in OPERATORS_WITHOUT_PLUS_AND_MINUS and expression_list[i + 1] in PLUS_AND_MINUS:
+        if expression_list[i] == '(' and expression_list[i + 1] in PLUS_AND_MINUS and expression_list[i + 2] == '(':
+            expression_list[i + 1:i + 2] = ['-1', '*']
+            size = len(expression_list)
+        elif expression_list[i] in MULT_DIV_EXP_L_PARENTHESIS and expression_list[i + 1] in PLUS_AND_MINUS:
             expression_list[i + 2] = expression_list[i + 1] + expression_list[i + 2]
             del expression_list[i + 1]
-            size -= 1
+            size = len(expression_list)
         i += 1
     queue = deque(expression_list)  # get rid of the empty elements
     if queue[0] == '-':  # '-' might be the first element, it should be a part of the first operand then

@@ -4,6 +4,7 @@ from collections import deque
 
 import infix_to_postfix_api
 
+
 var_dict = {}
 operations = {
     '+': lambda a, b: a + b,
@@ -36,9 +37,8 @@ def main():
             try:
                 postfix_queue = infix_to_postfix_api.parse(expression)
                 print(calc_postfix_queue(postfix_queue))
-            except (ArithmeticError, ValueError, IndexError) as err:
+            except (ArithmeticError, ValueError, IndexError):
                 print('Invalid expression')
-                print(err)
             except (KeyError, NameError):
                 print('Unknown variable')
         expression = input()
@@ -52,11 +52,8 @@ def solve(expression: str, **variables):
 
 def calc_postfix_queue(queue: deque):
     stack = deque()
-    i = 0
     while queue:
         elem = queue.popleft()
-        if i == 166:
-            i = i
         if elem not in infix_to_postfix_api.OPERATORS:
             if is_var(elem):
                 if elem in var_dict:
@@ -67,9 +64,7 @@ def calc_postfix_queue(queue: deque):
         else:
             b = stack.pop()
             a = stack.pop()
-            var = operations[elem](a, b)
-            stack.append(var)
-        i += 1
+            stack.append(operations[elem](a, b))
     result = stack.pop()
     if result is complex or float:  # may produce complex numbers
         return result
