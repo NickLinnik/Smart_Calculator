@@ -125,9 +125,9 @@ Variable declaration syntax:
 Other syntax peculiarities:
     - calculation is insensitive to tabs and spaces in expression
     - multiple '+' and '-' signs between operations are supported
+    - negative numbers should be written in paranthesis
 ''')
 }
-
 
 if __name__ == '__main__':
     main()
