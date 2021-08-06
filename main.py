@@ -52,8 +52,11 @@ def solve(expression: str, **variables):
 
 def calc_postfix_queue(queue: deque):
     stack = deque()
+    i = 0
     while queue:
         elem = queue.popleft()
+        if i == 166:
+            i = i
         if elem not in infix_to_postfix_api.OPERATORS:
             if is_var(elem):
                 if elem in var_dict:
@@ -64,9 +67,14 @@ def calc_postfix_queue(queue: deque):
         else:
             b = stack.pop()
             a = stack.pop()
-            stack.append(operations[elem](a, b))
+            var = operations[elem](a, b)
+            stack.append(var)
+        i += 1
     result = stack.pop()
-    return int(result) if result // 1 == result else result  # return as int if it has no fraction
+    if result is complex or float:  # may produce complex numbers
+        return result
+    elif result // 1 == result:
+        return int(result)  # return as int if it has no fraction
 
 
 def upd_dict_with_var(key: str, value):

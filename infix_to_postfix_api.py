@@ -2,6 +2,8 @@ import re
 from collections import deque
 
 OPERATORS = {'+', '-', '*', '/', '(', ')', '^'}
+OPERATORS_WITHOUT_PLUS_AND_MINUS = {'*', '/', '^'}
+PLUS_AND_MINUS = {'+', '-'}
 
 
 def parse(expression: str):
@@ -35,7 +37,16 @@ def parse(expression: str):
 
 def get_infix_queue(expression: str):
     expression_list = re.split('([+\\-*/^()])', expression)  # split by operators
-    queue = deque([x for x in expression_list if x != ''])  # get rid of the empty elements
+    expression_list = [x for x in expression_list if x != '']
+    size = len(expression_list)
+    i = 0
+    while i < size:
+        if expression_list[i] in OPERATORS_WITHOUT_PLUS_AND_MINUS and expression_list[i + 1] in PLUS_AND_MINUS:
+            expression_list[i + 2] = expression_list[i + 1] + expression_list[i + 2]
+            del expression_list[i + 1]
+            size -= 1
+        i += 1
+    queue = deque(expression_list)  # get rid of the empty elements
     if queue[0] == '-':  # '-' might be the first element, it should be a part of the first operand then
         queue[1] = '-' + queue[1]
         queue.remove('-')
