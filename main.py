@@ -66,9 +66,9 @@ def calc_postfix_queue(queue: deque):
             a = stack.pop()
             stack.append(operations[elem](a, b))
     result = stack.pop()
-    if result is complex or float:  # may produce complex numbers
+    if result is complex or result // 1 != result:  # may produce complex numbers
         return result
-    elif result // 1 == result:
+    else:
         return int(result)  # return as int if it has no fraction
 
 
@@ -125,7 +125,7 @@ Variable declaration syntax:
 Other syntax peculiarities:
     - calculation is insensitive to tabs and spaces in expression
     - multiple '+' and '-' signs between operations are supported
-    - negative numbers should be written in paranthesis
+    - negative numbers should be written in parenthesis
 ''')
 }
 
